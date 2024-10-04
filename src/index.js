@@ -110,6 +110,7 @@ async function main() {
             media: fileData,
         });
     }
+    actions.info(`Getting fileId`);
     fileId = await getFileId(filename, uploadFolderId);
     actions.setOutput('fileId', fileId);
 }
