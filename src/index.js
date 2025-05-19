@@ -96,7 +96,7 @@ async function main() {
             parents: [uploadFolderId],
         };
 
-        return drive.files.create({
+        await drive.files.create({
             resource: fileMetadata,
             media: fileData,
             uploadType: 'multipart',
@@ -105,11 +105,14 @@ async function main() {
         });
     } else {
         actions.info(`File ${filename} already exists. Updating it.`);
-        return drive.files.update({
+        await drive.files.update({
             fileId,
             media: fileData,
         });
     }
+
+    fileId = await getFileId(filename, uploadFolderId);
+    actions.info(`FileId ${fileId} for ${filename}`);
 }
 
 main().catch((error) => actions.setFailed(error));
