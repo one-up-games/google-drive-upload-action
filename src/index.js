@@ -55,7 +55,7 @@ async function getUploadFolderId() {
 async function getFileId(targetFilename, folderId) {
     const { data: { files } } = await drive.files.list({
         q: `name='${targetFilename}'`,
-        fields: 'files(id)',
+        fields: 'files(id, name)',
     });
 
     if (files.length > 1) {
