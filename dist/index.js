@@ -522922,6 +522922,7 @@ async function getFileId(targetFilename, folderId) {
     }
 
     files.forEach((element) => actions.info(element));
+    
     if (files.length === 1) {
         return files[0].id;
     }
@@ -522984,7 +522985,7 @@ async function main() {
     await waitforme(5000);
 
     fileId = await getFileId(filename, uploadFolderId);
-    actions.info(`FileId ${fileId} for ${filename} and folder ${folderId}`);
+    actions.info(`FileId ${fileId} for ${filename}`);
 }
 
 main().catch((error) => actions.setFailed(error));
