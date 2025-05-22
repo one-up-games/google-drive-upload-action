@@ -104,7 +104,7 @@ async function main() {
             fields: 'id',
             supportsAllDrives: true,
         });
-        download_url = `https://drive.google.com/file/d/${res.result.id}`;
+        download_url = `https://drive.google.com/file/d/${result.data.id}`;
         actions.setOutput("download_url", download_url);
 
     } else {
@@ -113,7 +113,7 @@ async function main() {
             fileId,
             media: fileData,
         });
-        download_url = `https://drive.google.com/file/d/${res.result.id}`;
+        download_url = `https://drive.google.com/file/d/${result.data.id}`;
         actions.setOutput("download_url", download_url);        
     }
 }
