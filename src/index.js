@@ -60,13 +60,8 @@ async function getFileId(targetFilename, folderId) {
         supportsAllDrives: true,
     });
 
+
     if (files.length > 1) {
-        throw new Error('More than one entry match the file name');
-    }
-
-    files.forEach((element) => actions.info(element));
-
-    if (files.length === 1) {
         return files[0].id;
     }
 
@@ -88,6 +83,7 @@ async function main() {
     }
 
     let fileId = null;
+    let download_url = null;
 
     if (overwrite) {
         fileId = await getFileId(filename, uploadFolderId);
@@ -126,8 +122,10 @@ async function main() {
     actions.info(`Wait for 5 seconds`);
     await waitforme(5000);
     fileId = await getFileId(filename, uploadFolderId);
-    actions.setOutput("download_url", 'https://drive.google.com/file/d/{fileId}');
+    download_url = 'https://drive.google.com/file/d/{fileId}';
+    actions.setOutput("download_url", download_url);
     actions.info(`FileId ${fileId} for ${filename}`);
+    actions.info(`FileId ${download_url} for ${filename}`);
 }
 
 main().catch((error) => actions.setFailed(error));
