@@ -522912,7 +522912,8 @@ async function getUploadFolderId() {
 async function getFileId(targetFilename, folderId) {
     const { data: { files } } = await drive.files.list({
         q: `name='${targetFilename}'`,
-        fields: 'files(id, name)'
+        fields: 'files(id, name)',
+        driveId: '${folderId}'
     });
 
     if (files.length > 1) {
@@ -522979,7 +522980,7 @@ async function main() {
     await waitforme(5000);
 
     fileId = await getFileId(filename, uploadFolderId);
-    actions.info(`FileId ${fileId} for ${filename}`);
+    actions.info(`FileId ${fileId} for ${filename} and folder ${folderId}`);
 }
 
 main().catch((error) => actions.setFailed(error));
