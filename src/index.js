@@ -112,21 +112,18 @@ async function main() {
             supportsAllDrives: true,
         });
         actions.info(res.data.id);
+        download_url = `https://drive.google.com/file/d/${res.data.id}`;
+        actions.setOutput("download_url", download_url);
     } else {
         actions.info(`File ${filename} already exists. Updating it.`);
-        await drive.files.update({
+        const res = await drive.files.update({
             fileId,
             media: fileData,
         });
+        actions.info(res.data.id);
+        download_url = `https://drive.google.com/file/d/${res.data.id}`;
+        actions.setOutput("download_url", download_url);        
     }
-
-    actions.info(`Wait for 5 seconds`);
-    await waitforme(5000);
-    fileId = await getFileId(filename, uploadFolderId);
-    download_url = `https://drive.google.com/file/d/${fileId}`;
-    actions.setOutput("download_url", download_url);
-    actions.info(`FileId ${fileId} for ${filename}`);
-    actions.info(`FileId ${download_url} for ${filename}`);
 }
 
 main().catch((error) => actions.setFailed(error));
