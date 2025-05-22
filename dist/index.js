@@ -522911,10 +522911,10 @@ async function getUploadFolderId() {
 
 async function getFileId(targetFilename, folderId) {
     const { data: { files } } = await drive.files.list({
-        q: `name='${targetFilename}'`,
-        fields: 'files(id, name)',
-        driveId: '${folderId}',
-        includeItemsFromAllDrives: true
+        q: `name='${childFolder}' and '${parentFolderId}' in parents and trashed=false`,
+        fields: 'files(id)',
+        includeItemsFromAllDrives: true,
+        supportsAllDrives: true,
     });
 
     if (files.length > 1) {
@@ -522938,6 +522938,7 @@ function waitforme(millisec) {
 async function main() {
     const uploadFolderId = await getUploadFolderId();
 
+    actions.info(`uploadFolderId ${uploadFolderId}`);
     if (!filename) {
         filename = target.split('/').pop();
     }
