@@ -54,30 +54,23 @@ async function getUploadFolderId() {
 
 async function getFileId(targetFilename, folderId) {
     const { data: { files } } = await drive.files.list({
-        q: `name='${targetFilename}' and '${folderId}' in parents and trashed=false`,
+        q: `name='${targetFilename}' and '${folderId}' in parents`,
         fields: 'files(id)',
-        includeItemsFromAllDrives: true,
-        supportsAllDrives: true,
     });
 
-
     if (files.length > 1) {
+        throw new Error('More than one entry match the file name');
+    }
+    if (files.length === 1) {
         return files[0].id;
     }
 
     return null;
 }
 
-function waitforme(millisec) {
-    return new Promise(resolve => {
-        setTimeout(() => { resolve('') }, millisec);
-    })
-}
-
 async function main() {
     const uploadFolderId = await getUploadFolderId();
 
-    actions.info(`uploadFolderId ${uploadFolderId}`);
     if (!filename) {
         filename = target.split('/').pop();
     }
@@ -104,24 +97,23 @@ async function main() {
             parents: [uploadFolderId],
         };
 
-        const res = await drive.files.create({
+        const result = await drive.files.create({
             resource: fileMetadata,
             media: fileData,
             uploadType: 'multipart',
             fields: 'id',
             supportsAllDrives: true,
         });
-        actions.info(res.data.id);
-        download_url = `https://drive.google.com/file/d/${res.data.id}`;
+        download_url = `https://drive.google.com/file/d/${res.result.id}`;
         actions.setOutput("download_url", download_url);
+
     } else {
         actions.info(`File ${filename} already exists. Updating it.`);
-        const res = await drive.files.update({
+        const result = await drive.files.update({
             fileId,
             media: fileData,
         });
-        actions.info(res.data.id);
-        download_url = `https://drive.google.com/file/d/${res.data.id}`;
+        download_url = `https://drive.google.com/file/d/${res.result.id}`;
         actions.setOutput("download_url", download_url);        
     }
 }
