@@ -124,7 +124,7 @@ async function main() {
     }
 
     actions.info(`Wait for 5 seconds`);
-
+    await waitforme(5000);
     fileId = await getFileId(filename, uploadFolderId);
     actions.setOutput("download_url", 'https://drive.google.com/file/d/{fileId}');
     actions.info(`FileId ${fileId} for ${filename}`);
