@@ -111,6 +111,10 @@ async function main() {
         });
     }
 
+    actions.info(`Wait for 5 seconds`);
+    
+    await delay(5000);
+
     fileId = await getFileId(filename, uploadFolderId);
     actions.info(`FileId ${fileId} for ${filename}`);
 }
