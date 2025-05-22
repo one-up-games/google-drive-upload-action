@@ -522913,12 +522913,15 @@ async function getFileId(targetFilename, folderId) {
     const { data: { files } } = await drive.files.list({
         q: `name='${targetFilename}'`,
         fields: 'files(id, name)',
-        driveId: '${folderId}'
+        driveId: '${folderId}',
+        includeItemsFromAllDrives: true
     });
 
     if (files.length > 1) {
         throw new Error('More than one entry match the file name');
     }
+
+    files.forEach((element) => actions.info(element));
     if (files.length === 1) {
         return files[0].id;
     }
