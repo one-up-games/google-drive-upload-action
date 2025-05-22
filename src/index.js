@@ -76,6 +76,7 @@ async function main() {
     }
 
     let fileId = null;
+    let download_url = null;
 
     if (overwrite) {
         fileId = await getFileId(filename, uploadFolderId);
@@ -96,19 +97,24 @@ async function main() {
             parents: [uploadFolderId],
         };
 
-        return drive.files.create({
+        const result = await drive.files.create({
             resource: fileMetadata,
             media: fileData,
             uploadType: 'multipart',
             fields: 'id',
             supportsAllDrives: true,
         });
+        download_url = `https://drive.google.com/file/d/${result.data.id}`;
+        actions.setOutput("download_url", download_url);
+
     } else {
         actions.info(`File ${filename} already exists. Updating it.`);
-        return drive.files.update({
+        const result = await drive.files.update({
             fileId,
             media: fileData,
         });
+        download_url = `https://drive.google.com/file/d/${result.data.id}`;
+        actions.setOutput("download_url", download_url);        
     }
 }
 
