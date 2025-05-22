@@ -522925,6 +522925,12 @@ async function getFileId(targetFilename, folderId) {
     return null;
 }
 
+function waitforme(millisec) {
+    return new Promise(resolve => {
+        setTimeout(() => { resolve('') }, millisec);
+    })
+}
+
 async function main() {
     const uploadFolderId = await getUploadFolderId();
 
@@ -522969,8 +522975,8 @@ async function main() {
     }
 
     actions.info(`Wait for 5 seconds`);
-    
-    await delay(5000);
+
+    await waitforme(5000);
 
     fileId = await getFileId(filename, uploadFolderId);
     actions.info(`FileId ${fileId} for ${filename}`);
